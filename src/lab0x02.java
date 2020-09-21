@@ -1,15 +1,17 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+
 public class lab0x02 {
 //    public static int randMax = 1000;
 //    public static int randMin = 0;
+        public static int minV = 65;
+        public static int maxV = 90;
     public static void main(String[] args) {
 
-        int N = 200;
-        int k = 2;
-        int minV = 97;
-        int maxV = 122;
+        int N = 30;
+        int k = 3;
+
 
         char[][] arr = GenerateTestList(N, k, minV, maxV);
 //        int result = CompareStrings(arr[0], arr[1]);
@@ -18,13 +20,15 @@ public class lab0x02 {
 //        System.out.println("String 1: " + new String(arr[0]) + " String 2: " + new String(arr[1]) + " compare function returns: " + result);
 //        Quicksort(arr);
 //        Mergesort(arr);
-        InsertionSort(arr);
+//        InsertionSort(arr);
+        RadixSort(arr,k);
         PrintStrings(arr);
+
     }
     public static void PrintStrings (char[][] arr){
         for (int i = 0; i < arr.length; i++) {
             String str = new String(arr[i]);
-            System.out.print(str + " ");
+            System.out.print(str + " - ");
         }
         System.out.println();
     }
@@ -153,4 +157,78 @@ public class lab0x02 {
 //        Arrays.fill(count, 0);
 //
 //    }
+//    public static void RadixSort(char[][] a, int w ) {
+//
+//        int n = a.length;
+//        int charRange = maxV - minV;
+//        char[][] aux = new char[n][w];
+//
+//        for (int d = w-1; d >= 0; d--) {
+//            // sort by key-indexed counting on dth character
+//
+//            // compute frequency counts
+//            int[] count = new int[charRange+1];
+//            for (int i = 0; i < n; i++){
+//                //count[a[i][d] + 1 - minV]++;
+//                int currChar = (int)a[i][d];
+////                currChar++;
+//                int countIndex = currChar - minV + 1;
+//                count[countIndex]++;
+//            }
+//
+//            // compute cumulates
+//            for (int r = 0; r < charRange; r++)
+//                count[r+1] += count[r];
+//
+//            // move data
+//            for (int i = 0; i < n; i++) {
+////                aux[count[a[i][d]++] = a[i];
+//                char charTarget = a[i][d];
+//                int charToCount = count[charTarget - minV + 1];
+//                aux[charToCount] = a[i];
+//                charToCount++;
+//            }
+//
+//            // copy back
+//            for (int i = 0; i < n; i++)
+//                a[i] = aux[i];
+//        }
+//    }
+    public static void RadixSort(char[][] arr, int w ) {
+
+        int n = arr.length;
+        int charRange = maxV - minV;
+        char[][] temp = new char[n][w];
+
+        for (int d = w-1; d >= 0; d--){
+
+            //tally counts for current char
+            int[] count = new int[charRange + 1];
+            for (int i = 0; i < n; i++) {
+                char currChar = arr[i][d];
+                int countIndex = currChar - minV;
+                count[countIndex]++;
+            }
+
+            //prefix sum
+            for (int i = 0; i < charRange; i++) {
+                count[i + 1] += count[i];
+            }
+
+            //place values in temp arr
+            for (int i = n - 1; i >= 0; i--) {
+                char currChar = arr[i][d];
+                int newIndex = --count[currChar - minV];
+                temp[newIndex] = arr[i];
+            }
+
+            //copy back to original array
+            for (int i = 0; i < n; i++) {
+                arr[i] = temp[i];
+            }
+        }
+
+
+
+    }
 }
