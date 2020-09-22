@@ -22,9 +22,7 @@ public class lab0x02 {
     }
 
     public static void main(String[] args) {
-
-        SetupTest();
-
+        SetupTest(CurrentSort.INSERTION_SORT);
 
     }
 
@@ -223,14 +221,14 @@ public class lab0x02 {
         }
     }
 
-    public static void SetupTest(){
+    public static void SetupTest(CurrentSort currSort){
         //initialize array and variables:
         //N loop (doubling each iteration)
         Vector<Long> k6Times = new Vector<Long>();
         Vector<Long> k12Times = new Vector<Long>();
         Vector<Long> k24Times = new Vector<Long>();
         Vector<Long> k48Times = new Vector<Long>();
-        for( CurrentSort currSort : CurrentSort.values() ) {
+//        for( CurrentSort currSort : CurrentSort.values() ) {
             System.out.println(currSort);
             int currSortRound = 0;
             boolean continueTiming = true;
@@ -287,7 +285,7 @@ public class lab0x02 {
             k12Times.clear();
             k24Times.clear();
             k48Times.clear();
-        }
+//        }
     }
 
     public static long PerformTestTiming(CurrentSort currentSort, int N, int k, int minV, int maxV){
