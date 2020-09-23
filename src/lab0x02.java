@@ -7,8 +7,8 @@ public class lab0x02 {
 //    public static int randMax = 1000;
 //    public static int randMin = 0;
 
-    public static int minV = 65;
-    public static int maxV = 91;
+    public static int minV = 1;
+    public static int maxV = 255;
 
     public static int maxN = 1000000000;
     public static int timingSamples = 20;
@@ -22,7 +22,36 @@ public class lab0x02 {
     }
 
     public static void main(String[] args) {
-        SetupTest(CurrentSort.INSERTION_SORT);
+//        char[][]arr = GenerateTestList(100,3,minV,maxV);
+//        IsSorted(arr);
+//        InsertionSort(arr);
+//        IsSorted(arr);
+//        arr = GenerateTestList(100,3,minV,maxV);
+//        IsSorted(arr);
+//        Quicksort(arr);
+//        IsSorted(arr);
+//        arr = GenerateTestList(100,3,minV,maxV);
+//        IsSorted(arr);
+//        Mergesort(arr);
+//        IsSorted(arr);
+//        arr = GenerateTestList(100,3,minV,maxV);
+//        IsSorted(arr);
+//        RadixSort(arr,3);
+//        IsSorted(arr);
+
+//        SetupTest(CurrentSort.RADIX_SORT);
+        int twoByte = (int)(Math.pow(2,16) -1);
+        int k = 3;
+        int[][] intArr = GenerateIntList(10, 3, 1, twoByte);
+        PrintDigits(intArr, k);
+        RadixSort(intArr, 3, 2);
+        PrintDigits(intArr, k);
+        int threeByte = (int)(Math.pow(2,24) - 1);
+        intArr = GenerateIntList(10, k, 1, threeByte );
+        PrintDigits(intArr,k);
+        RadixSort(intArr, 3, 3);
+        PrintDigits(intArr,k);
+
 
     }
 
@@ -50,6 +79,20 @@ public class lab0x02 {
         }
         System.out.println();
     }
+
+    public static void PrintDigits(int[][] arr, int k){
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j <= k; j++) {
+                int digit = arr[i][j];
+                if (j == k)
+                    System.out.print(digit + "\t");
+                else
+                    System.out.print(digit + ", ");
+            }
+
+        }
+        System.out.println();
+    }
     //compares 2 strings returns: (-) if str1 < str2, 0 if str1==str2, else (+)
     public static int CompareStrings (char[]str1, char[]str2){
         String string1 = new String(str1);
@@ -66,8 +109,24 @@ public class lab0x02 {
                 if (j == k)
                     arr[i][j] = 0;
                 else {
-                    int ascii = (int) (Math.random() * (maxV - minV)) + minV;
-                    arr[i][j] = (char)ascii;
+                    int c = (int) (Math.random() * (maxV - minV)) + minV;
+                    arr[i][j] = (char)c;
+                }
+            }
+        }
+        return arr;
+    }
+
+    public static int[][] GenerateIntList(int N, int k, int min, int max){
+        int[][] arr = new int[N][k + 1];
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < k + 1; j++) {
+                if (j == k)
+                    arr[i][j] = 0;
+                else {
+                    int rand = (int)(Math.random() * (max - min)) + min;
+                    arr[i][j] = rand;
                 }
             }
         }
@@ -170,23 +229,23 @@ public class lab0x02 {
 
     //*** Radix Sort Functions:  ************//
 
-    public static void RadixSort(char[][] arr, int w) {
+    public static void RadixSort(char[][] arr, int k) {
 
         int n = arr.length;
         int charRange = maxV - minV;
-        char[][] temp = new char[n][w];
+        char[][] temp = new char[n][k];
         int arrayPointer = 0; // if even: arr is sorted, odd: temp is sorted
 
-        for (int d = w-1; d >= 0; d--){
+        for (int digit = k-1; digit >= 0; digit--){
 
             //tally counts for current char
             int[] count = new int[charRange + 1];
             for (int i = 0; i < n; i++) {
                 char currChar;
                 if (arrayPointer % 2 == 0)
-                    currChar = arr[i][d];
+                    currChar = arr[i][digit];
                 else
-                    currChar = temp[i][d];
+                    currChar = temp[i][digit];
                 int countIndex = currChar - minV;
                 count[countIndex]++;
             }
@@ -201,12 +260,65 @@ public class lab0x02 {
                 char currChar;
                 int newIndex;
                 if (arrayPointer % 2 == 0) {
-                    currChar = arr[i][d];
+                    currChar = arr[i][digit];
                     newIndex = --count[currChar - minV];
                     temp[newIndex] = arr[i];
                 } else{
-                    currChar = temp[i][d];
+                    currChar = temp[i][digit];
                     newIndex = --count[currChar - minV];
+                    arr[newIndex] = temp[i];
+                }
+
+            }
+            arrayPointer++;
+        }
+        //copy back to original array if arrayPointer is odd
+        if (arrayPointer % 2 == 1){
+            for (int i = 0; i < n; i++) {
+                arr[i] = temp[i];
+            }
+        }
+    }
+
+    public static void RadixSort(int[][] arr, int k, int d) {
+        int exp = 8 * d;
+        int min = 1;
+        int max = (int)(Math.pow(2,exp) - 1);
+        int n = arr.length;
+        int range = max - min;
+        int[][] temp = new int[n][k];
+        int arrayPointer = 0; // if even: arr is sorted, odd: temp is sorted
+
+        for (int digit = k-1; digit >= 0; digit--){
+
+            //tally counts for current char
+            int[] count = new int[range + 1];
+            for (int i = 0; i < n; i++) {
+                int currChar;
+                if (arrayPointer % 2 == 0)
+                    currChar = arr[i][digit];
+                else
+                    currChar = temp[i][digit];
+                int countIndex = currChar - min;
+                count[countIndex]++;
+            }
+
+            //prefix sum
+            for (int i = 0; i < range; i++) {
+                count[i + 1] += count[i];
+            }
+
+            //place values in temp array or back in source array
+            for (int i = n - 1; i >= 0; i--) {
+                int currDigit;
+                int newIndex;
+                if (arrayPointer % 2 == 0) {
+                    currDigit = arr[i][digit];
+                    newIndex = --count[currDigit - min];
+                    temp[newIndex] = arr[i];
+                } else{
+                    currDigit = temp[i][digit];
+                    newIndex = --count[currDigit - min];
                     arr[newIndex] = temp[i];
                 }
 
