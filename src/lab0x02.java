@@ -18,7 +18,9 @@ public class lab0x02 {
         INSERTION_SORT,
         QUICK_SORT,
         MERGE_SORT,
-        RADIX_SORT
+        RADIX_SORT_D1,
+        RADIX_SORT_D2,
+        RADIX_SORT_D3,
     }
 
     public static void main(String[] args) {
@@ -39,18 +41,18 @@ public class lab0x02 {
 //        RadixSort(arr,3);
 //        IsSorted(arr);
 
-//        SetupTest(CurrentSort.RADIX_SORT);
-        int twoByte = (int)(Math.pow(2,16) -1);
-        int k = 3;
-        int[][] intArr = GenerateIntList(10, 3, 1, twoByte);
-        PrintDigits(intArr, k);
-        RadixSort(intArr, 3, 2);
-        PrintDigits(intArr, k);
-        int threeByte = (int)(Math.pow(2,24) - 1);
-        intArr = GenerateIntList(10, k, 1, threeByte );
-        PrintDigits(intArr,k);
-        RadixSort(intArr, 3, 3);
-        PrintDigits(intArr,k);
+        SetupTest(CurrentSort.RADIX_SORT_D3);
+//        int twoByte = (int)(Math.pow(2,16) -1);
+//        int k = 3;
+//        int[][] intArr = GenerateIntList(10, 3, 1, twoByte);
+//        PrintDigits(intArr, k);
+//        RadixSort(intArr, 3, 2);
+//        PrintDigits(intArr, k);
+//        int threeByte = (int)(Math.pow(2,24) - 1);
+//        intArr = GenerateIntList(10, k, 1, threeByte );
+//        PrintDigits(intArr,k);
+//        RadixSort(intArr, 3, 3);
+//        PrintDigits(intArr,k);
 
 
     }
@@ -101,7 +103,7 @@ public class lab0x02 {
         return string1.compareTo(string2);
     }
 
-    public static char[][] GenerateTestList(int N, int k, int minV, int maxV){
+    public static char[][] GenerateTestList(int N, int k, int min, int max){
         char[][] arr = new char[N][k+1];
 
         for (int i = 0; i < N; i++) {
@@ -109,7 +111,7 @@ public class lab0x02 {
                 if (j == k)
                     arr[i][j] = 0;
                 else {
-                    int c = (int) (Math.random() * (maxV - minV)) + minV;
+                    int c = (int) (Math.random() * (max - min)) + min;
                     arr[i][j] = (char)c;
                 }
             }
@@ -229,64 +231,64 @@ public class lab0x02 {
 
     //*** Radix Sort Functions:  ************//
 
-    public static void RadixSort(char[][] arr, int k) {
+//    public static void RadixSort(char[][] arr, int k) {
+//
+//        int n = arr.length;
+//        int charRange = maxV - minV;
+//        char[][] temp = new char[n][k];
+//        int arrayPointer = 0; // if even: arr is sorted, odd: temp is sorted
+//
+//        for (int digit = k-1; digit >= 0; digit--){
+//
+//            //tally counts for current char
+//            int[] count = new int[charRange + 1];
+//            for (int i = 0; i < n; i++) {
+//                char currChar;
+//                if (arrayPointer % 2 == 0)
+//                    currChar = arr[i][digit];
+//                else
+//                    currChar = temp[i][digit];
+//                int countIndex = currChar - minV;
+//                count[countIndex]++;
+//            }
+//
+//            //prefix sum
+//            for (int i = 0; i < charRange; i++) {
+//                count[i + 1] += count[i];
+//            }
+//
+//            //place values in temp array or back in source array
+//            for (int i = n - 1; i >= 0; i--) {
+//                char currChar;
+//                int newIndex;
+//                if (arrayPointer % 2 == 0) {
+//                    currChar = arr[i][digit];
+//                    newIndex = --count[currChar - minV];
+//                    temp[newIndex] = arr[i];
+//                } else{
+//                    currChar = temp[i][digit];
+//                    newIndex = --count[currChar - minV];
+//                    arr[newIndex] = temp[i];
+//                }
+//
+//            }
+//            arrayPointer++;
+//        }
+//        //copy back to original array if arrayPointer is odd
+//        if (arrayPointer % 2 == 1){
+//            for (int i = 0; i < n; i++) {
+//                arr[i] = temp[i];
+//            }
+//        }
+//    }
 
-        int n = arr.length;
-        int charRange = maxV - minV;
-        char[][] temp = new char[n][k];
-        int arrayPointer = 0; // if even: arr is sorted, odd: temp is sorted
-
-        for (int digit = k-1; digit >= 0; digit--){
-
-            //tally counts for current char
-            int[] count = new int[charRange + 1];
-            for (int i = 0; i < n; i++) {
-                char currChar;
-                if (arrayPointer % 2 == 0)
-                    currChar = arr[i][digit];
-                else
-                    currChar = temp[i][digit];
-                int countIndex = currChar - minV;
-                count[countIndex]++;
-            }
-
-            //prefix sum
-            for (int i = 0; i < charRange; i++) {
-                count[i + 1] += count[i];
-            }
-
-            //place values in temp array or back in source array
-            for (int i = n - 1; i >= 0; i--) {
-                char currChar;
-                int newIndex;
-                if (arrayPointer % 2 == 0) {
-                    currChar = arr[i][digit];
-                    newIndex = --count[currChar - minV];
-                    temp[newIndex] = arr[i];
-                } else{
-                    currChar = temp[i][digit];
-                    newIndex = --count[currChar - minV];
-                    arr[newIndex] = temp[i];
-                }
-
-            }
-            arrayPointer++;
-        }
-        //copy back to original array if arrayPointer is odd
-        if (arrayPointer % 2 == 1){
-            for (int i = 0; i < n; i++) {
-                arr[i] = temp[i];
-            }
-        }
-    }
-
-    public static void RadixSort(int[][] arr, int k, int d) {
+    public static void RadixSort(char[][] arr, int k, int d) {
         int exp = 8 * d;
         int min = 1;
         int max = (int)(Math.pow(2,exp) - 1);
         int n = arr.length;
         int range = max - min;
-        int[][] temp = new int[n][k];
+        char[][] temp = new char[n][k];
         int arrayPointer = 0; // if even: arr is sorted, odd: temp is sorted
 
         for (int digit = k-1; digit >= 0; digit--){
@@ -336,15 +338,18 @@ public class lab0x02 {
     public static void SetupTest(CurrentSort currSort){
         //initialize array and variables:
         //N loop (doubling each iteration)
-        Vector<Long> k6Times = new Vector<Long>();
-        Vector<Long> k12Times = new Vector<Long>();
-        Vector<Long> k24Times = new Vector<Long>();
-        Vector<Long> k48Times = new Vector<Long>();
-//        for( CurrentSort currSort : CurrentSort.values() ) {
+        long k6TimeCurr = 0;
+        long k6TimePrev = 0;
+        long k12TimeCurr = 0;
+        long k12TimePrev = 0;
+        long k24TimeCurr = 0;
+        long k24TimePrev = 0;
+        long k48TimeCurr = 0;
+        long k48TimePrev = 0;
+
             System.out.println(currSort);
             int currSortRound = 0;
             boolean continueTiming = true;
-
 
             System.out.format("%15s%15s%15s%15s%15s%15s%15s%15s%15s%15s\n","", "k=6","Doubling", "k=12", "Doubling", "k=24", "Doubling", "k=48", "Doubling", "Predicted");
             System.out.format("%15s%15s%15s%15s%15s%15s%15s%15s%15s%15s\n","N", "Time","Ratio", "Time", "Ratio", "Time", "Ratio", "Time", "Ratio", "DoublingRatio");
@@ -352,7 +357,7 @@ public class lab0x02 {
             for (int N = 2; N < maxN && continueTiming; N *= 2) {
                 double doublingTime = 0;
                 double expDoubling;
-                if (currSort == CurrentSort.RADIX_SORT)
+                if (currSort == CurrentSort.RADIX_SORT_D1 || currSort == CurrentSort.RADIX_SORT_D2 ||currSort == CurrentSort.RADIX_SORT_D3 )
                     expDoubling = 2;
                 else if (currSort == CurrentSort.MERGE_SORT || currSort == CurrentSort.QUICK_SORT)
                     expDoubling = (N * (Math.log(N)/Math.log(2)) )/ (N/2 * (Math.log(N/2)/Math.log(2)));
@@ -365,24 +370,24 @@ public class lab0x02 {
                         continueTiming = false;
                     switch (k){
                         case 6:
-                            k6Times.add(result);
+                            k6TimeCurr = result;
                             if (N > 2)
-                                doublingTime = (double)k6Times.get(currSortRound) / k6Times.get(currSortRound - 1);
+                                doublingTime = (double)k6TimeCurr / k6TimePrev;
                             break;
                         case 12:
-                            k12Times.add(result);
+                            k12TimeCurr = result;
                             if (N > 2)
-                                doublingTime = (double)k12Times.get(currSortRound) / k12Times.get(currSortRound - 1);
+                                doublingTime = (double)k12TimeCurr / k12TimePrev;
                             break;
                         case 24:
-                            k24Times.add(result);
+                            k24TimeCurr = result;
                             if (N > 2)
-                                doublingTime = (double)k24Times.get(currSortRound) / k24Times.get(currSortRound - 1);
+                                doublingTime = (double)k24TimeCurr / k24TimePrev;
                             break;
                         case 48:
-                            k48Times.add(result);
+                            k48TimeCurr = result;
                             if (N > 2)
-                                doublingTime = (double)k48Times.get(currSortRound) / k48Times.get(currSortRound - 1);
+                                doublingTime = (double)k48TimeCurr / k48TimePrev;
                             break;
                         default:
                             break;
@@ -391,12 +396,13 @@ public class lab0x02 {
                     System.out.format("%15d%15.5f", result, doublingTime);
                 }
                 System.out.format("%15.5f\n", expDoubling);
+                k6TimePrev = k6TimeCurr;
+                k12TimePrev = k12TimeCurr;
+                k24TimePrev = k24TimeCurr;
+                k48TimePrev = k48TimeCurr;
                 currSortRound++;
             }
-            k6Times.clear();
-            k12Times.clear();
-            k24Times.clear();
-            k48Times.clear();
+
 //        }
     }
 
@@ -479,14 +485,15 @@ public class lab0x02 {
                     long total = after - before;
                     return total;
                 }
-            case RADIX_SORT:
+            case RADIX_SORT_D1:
+                int d = 1;
                 if (N < 100000) {
                     int completedTests = 0;
                     long cumulativeTime = 0;
                     for (int i = 0; i < timingSamples && continueTest; i++) {
                         char[][] arr = GenerateTestList(N, k, minV, maxV);
                         long before = getCpuTime();
-                        RadixSort(arr, k);
+                        RadixSort(arr, k, d);
                         long after = getCpuTime();
                         long total = after - before;
                         cumulativeTime += total;
@@ -498,11 +505,68 @@ public class lab0x02 {
                 } else {
                     char[][] arr = GenerateTestList(N, k, minV, maxV);
                     long before = getCpuTime();
-                    RadixSort(arr, k);
+                    RadixSort(arr, k, d);
                     long after = getCpuTime();
                     long total = after - before;
                     return total;
                 }
+            case RADIX_SORT_D2:
+                int min = 1;
+                d = 2;
+                int exp = (int)(Math.pow(2,d));
+                int max = (int)(Math.pow(2,exp) - 1);
+                if (N < 100000) {
+                    int completedTests = 0;
+                    long cumulativeTime = 0;
+                    for (int i = 0; i < timingSamples && continueTest; i++) {
+                        char[][] arr = GenerateTestList(N, k, min, max);
+                        long before = getCpuTime();
+                        RadixSort(arr, k, d);
+                        long after = getCpuTime();
+                        long total = after - before;
+                        cumulativeTime += total;
+                        continueTest = ContinueMultipleSamples(total);
+                        completedTests++;
+                    }
+                    long average = cumulativeTime / completedTests;
+                    return average;
+                } else {
+                    char[][] arr = GenerateTestList(N, k, min, max);
+                    long before = getCpuTime();
+                    RadixSort(arr, k, d);
+                    long after = getCpuTime();
+                    long total = after - before;
+                    return total;
+                }
+            case RADIX_SORT_D3:
+                min = 1;
+                d = 3;
+                exp = (int)(Math.pow(2,d));
+                max = (int)(Math.pow(2,exp) - 1);
+                if (N < 100000) {
+                    int completedTests = 0;
+                    long cumulativeTime = 0;
+                    for (int i = 0; i < timingSamples && continueTest; i++) {
+                        char[][] arr = GenerateTestList(N, k, min, max);
+                        long before = getCpuTime();
+                        RadixSort(arr, k, d);
+                        long after = getCpuTime();
+                        long total = after - before;
+                        cumulativeTime += total;
+                        continueTest = ContinueMultipleSamples(total);
+                        completedTests++;
+                    }
+                    long average = cumulativeTime / completedTests;
+                    return average;
+                } else {
+                    char[][] arr = GenerateTestList(N, k, min, max);
+                    long before = getCpuTime();
+                    RadixSort(arr, k, d);
+                    long after = getCpuTime();
+                    long total = after - before;
+                    return total;
+                }
+
 
             default:
                 return -1;
