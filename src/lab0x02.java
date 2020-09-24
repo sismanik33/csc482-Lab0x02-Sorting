@@ -229,59 +229,6 @@ public class lab0x02 {
         }
     }
 
-    //*** Radix Sort Functions:  ************//
-
-//    public static void RadixSort(char[][] arr, int k) {
-//
-//        int n = arr.length;
-//        int charRange = maxV - minV;
-//        char[][] temp = new char[n][k];
-//        int arrayPointer = 0; // if even: arr is sorted, odd: temp is sorted
-//
-//        for (int digit = k-1; digit >= 0; digit--){
-//
-//            //tally counts for current char
-//            int[] count = new int[charRange + 1];
-//            for (int i = 0; i < n; i++) {
-//                char currChar;
-//                if (arrayPointer % 2 == 0)
-//                    currChar = arr[i][digit];
-//                else
-//                    currChar = temp[i][digit];
-//                int countIndex = currChar - minV;
-//                count[countIndex]++;
-//            }
-//
-//            //prefix sum
-//            for (int i = 0; i < charRange; i++) {
-//                count[i + 1] += count[i];
-//            }
-//
-//            //place values in temp array or back in source array
-//            for (int i = n - 1; i >= 0; i--) {
-//                char currChar;
-//                int newIndex;
-//                if (arrayPointer % 2 == 0) {
-//                    currChar = arr[i][digit];
-//                    newIndex = --count[currChar - minV];
-//                    temp[newIndex] = arr[i];
-//                } else{
-//                    currChar = temp[i][digit];
-//                    newIndex = --count[currChar - minV];
-//                    arr[newIndex] = temp[i];
-//                }
-//
-//            }
-//            arrayPointer++;
-//        }
-//        //copy back to original array if arrayPointer is odd
-//        if (arrayPointer % 2 == 1){
-//            for (int i = 0; i < n; i++) {
-//                arr[i] = temp[i];
-//            }
-//        }
-//    }
-
     public static void RadixSort(char[][] arr, int k, int d) {
         int exp = 8 * d;
         int min = 1;
